@@ -1,70 +1,53 @@
 #include <iostream>
+#include <sstream>
+#include <vector>
 using namespace std;
 
-struct Node
-{
+struct Node {
   int data;
   Node *left, *right;
 
-  Node(int key)
-  {
+  Node(int key) {
     data = key;
     left = right = nullptr;
   }
 };
 
-class BST
-{
-private:
+class BST {
+ private:
   Node *root;
-  Node *insertHelper(Node *node, int value)
-  {
-    if (node == nullptr)
-    {
+  Node *insertHelper(Node *node, int value) {
+    if (node == nullptr) {
       return new Node(value);
     }
-    if (value < node->data)
-    {
+    if (value < node->data) {
       node->left = insertHelper(node->left, value);
-    }
-    else if (value > node->data)
-    {
+    } else if (value > node->data) {
       node->right = insertHelper(node->right, value);
     }
     return node;
   }
-  Node *findMin(Node *node)
-  {
-    while (node->left != nullptr)
-    {
+  Node *findMin(Node *node) {
+    while (node->left != nullptr) {
       node = node->left;
     }
     return node;
   }
-  Node *deleteHelper(Node *node, int value)
-  {
-    if (node == nullptr)
-    {
+  Node *deleteHelper(Node *node, int value) {
+    if (node == nullptr) {
       return nullptr;
     }
-    if (value < node->data)
-    {
+    if (value < node->data) {
       node->left = deleteHelper(node->left, value);
-    }
-    else if (value > node->data)
-    {
+    } else if (value > node->data) {
       node->right = deleteHelper(node->right, value);
-    }
-    else
-    {
-      if (node->left == nullptr)
-      {
+    } else {
+      if (node->left == nullptr) {
         Node *temp = node->right;
         delete node;
         return temp;
       }
-      if (node->right == nullptr)
-      {
+      if (node->right == nullptr) {
         Node *temp = node->left;
         delete node;
         return temp;
@@ -75,30 +58,24 @@ private:
     }
     return node;
   }
-  void inOrder(Node *node)
-  {
-    if (node == nullptr)
-    {
+  void inOrder(Node *node) {
+    if (node == nullptr) {
       return;
     }
     inOrder(node->left);
     cout << node->data << " ";
     inOrder(node->right);
   }
-  void preOrder(Node *node)
-  {
-    if (node == nullptr)
-    {
+  void preOrder(Node *node) {
+    if (node == nullptr) {
       return;
     }
     cout << node->data << " ";
     preOrder(node->left);
     preOrder(node->right);
   }
-  void postOrder(Node *node)
-  {
-    if (node == nullptr)
-    {
+  void postOrder(Node *node) {
+    if (node == nullptr) {
       return;
     }
     postOrder(node->left);
@@ -106,51 +83,55 @@ private:
     cout << node->data << " ";
   }
 
-public:
-  BST()
-  {
-    root = nullptr;
-  }
-  void insert(int value)
-  {
-    root = insertHelper(root, value);
-  }
-  void deleteNode(int value)
-  {
-    root = deleteHelper(root, value);
-  }
-  void inOrder()
-  {
+ public:
+  BST() { root = nullptr; }
+  void insert(int value) { root = insertHelper(root, value); }
+  void deleteNode(int value) { root = deleteHelper(root, value); }
+  void inOrder() {
     inOrder(root);
-    cout << endl << endl;
+    cout << "In-order " << endl << endl;
   }
-  void preOrder()
-  {
+  void preOrder() {
     preOrder(root);
-    cout << endl << endl;
+    cout << "Pre-order " << endl << endl;
   }
-  void postOrder()
-  {
+  void postOrder() {
     postOrder(root);
-    cout << endl << endl;
+    cout << "post-order " << endl << endl;
   }
 };
 
-int main()
-{
+struct Command{
+  char operation;
+  int value;
+};
 
+int main() {
   BST bst;
-  int num;
 
-  for (int i = 1; i < 999; i++)
-  {
-    num = rand()%999+1;
-    bst.insert(num);
+  string inputLine;
+  vector<Command> commands;
+
+  cout << "Enter: ";
+  getline(cin, inputLine);
+  stringstream ss(inputLine);
+  string token;
+
+  while(ss >> token){
+    char operation = token[0];
+    int value = stoi(token.substr(1));
+    switch(operation){
+      case 'I':
+        bst.insert(value);
+        break;
+      case 'D':
+        bst.deleteNode(value);
+        break;
+    }
   }
   bst.inOrder();
   bst.preOrder();
   bst.postOrder();
-
 
   return 0;
 }

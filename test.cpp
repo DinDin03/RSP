@@ -105,6 +105,7 @@ class Graph {
     visited[start] = true;
     distance[start] = 0;
     q.push(start);
+
     while (q.empty() == false) {
       int current = q.front();
       q.pop();
@@ -114,19 +115,25 @@ class Graph {
           parent[neighbour] = current;
           distance[neighbour] = distance[current] + 1;
           q.push(neighbour);
-          if(neighbour == end){
+          if (neighbour == end) {
             break;
           }
         }
       }
     }
-    if(visited[end] == false){
-        cout << "There is no path from " << start << " to " << end << endl;
-        return;
+    if (visited[end] == false) {
+      cout << "\nThere is no path from " << start << " to " << end << endl;
+      return;
     }
-    for(int v = end; v != -1; v = parent[v]){
-        
+    for (int v = end; v != -1; v = parent[v]) {
+      path.push_back(v);
     }
+    reverse(path.begin(), path.end());
+    cout << "\nShortest path from " << start << " to " << end << " is: ";
+    for (int v : path) {
+      cout << v << "->";
+    }
+    cout << "\nDistance is " << distance[end] << endl;
   }
 
   void display() {

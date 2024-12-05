@@ -120,13 +120,13 @@ public:
     visited[current] = true;
     tempPath.push_back(current);
     cout << "pushed " << current << " to the temp path" << endl;
-    cout << "Checking path " << current << " to " << end << endl;
     cout << "Current path is: ";
     for (int temp : tempPath)
     {
       cout << temp << " ";
     }
     cout << endl;
+    cout << "Checking path " << current << " to " << end << endl;
 
     // If end node is reached, store the path
     if (current == end)
@@ -135,7 +135,7 @@ public:
       cout << "end is reached" << endl;
       return true; // End found
     }
-    cout << "end was not reached" << endl;
+    cout << "end was not reached. trying again" << endl;
 
     for (int neighbor : adjList[current])
     {
@@ -167,7 +167,7 @@ public:
       return;
     }
 
-    cout << "Shortest path from " << start << " to " << end << ": ";
+    cout << start << " to " << end << " is reachable via ";
     int distance = 0;
     for (int node : path)
     {
@@ -207,7 +207,7 @@ int main()
   {
     g.addVertex(i);
   }
-  for (int i = 0; i < numVerteces * 2; i++)
+  for (int i = 0; i < numVerteces * 10; i++)
   {
     int u = dist(gen);
     int v = dist(gen);

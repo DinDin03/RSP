@@ -96,44 +96,63 @@ class Graph {
   }
 
   void BFS(int start, int end) {
-    vector<bool> visited(vertices, false);
-    vector<int> parent(vertices, -1);
-    vector<int> distance(vertices, INT_MAX);
-    vector<int> path;
-    queue<int> q;
+    vector<bool> visited(
+        vertices,
+        false);  // keeps track of whether certain vertex is visisted or not
+    vector<int> parent(vertices,
+                       -1);  // Records the parent of each vertex in the BFS
+                             // tree. this helps reconstruct the path
+    vector<int> distance(vertices,
+                         INT_MAX);  // Stores the shortest distane from starting
+                                    // vertex to each vertex
+    queue<int> q;  // A queue is used to manages the vertices in the BFS tree
 
-    visited[start] = true;
-    distance[start] = 0;
-    q.push(start);
+    visited[start] = true;  // Mark the start vertex as visited
+    distance[start] = 0;    // Distance from the starting vertex to itself is 0
+    q.push(start);          // Add the start vertex to the queue
 
-    while (q.empty() == false) {
-      int current = q.front();
-      q.pop();
-      for (int neighbour : adjList[current]) {
-        if (visited[neighbour] == false) {
-          visited[neighbour] = true;
-          parent[neighbour] = current;
-          distance[neighbour] = distance[current] + 1;
-          q.push(neighbour);
-          if (neighbour == end) {
+    while (!q.empty()) {  // Iterate until the queue.empty() is false in
+                          // otherwords as long as the queue is not empty
+      int current =
+          q.front();  // set the vertex at the front of the queue to the current
+      q.pop();        // remove it from the queue
+
+      for (int neighbor :
+           adjList[current]) {  // iterates through all the adjacent vertices of
+                                // the current vertex
+        if (!visited[neighbor]) {      // if the neighbour is not visited
+          visited[neighbor] = true;    // Mark it as visited
+          parent[neighbor] = current;  // set the parent of that newly visited
+                                       // vertex to the current vertex
+          distance[neighbor] = distance[current] + 1;  // increment the distance
+          q.push(neighbor);  // add the neighbour to the queue
+
+          if (neighbor == end) {  // if the neighbour is same as the end stop
             break;
           }
         }
       }
     }
-    if (visited[end] == false) {
-      cout << "\nThere is no path from " << start << " to " << end << endl;
+
+    if (!visited[end]) {
+      cout << "\nNo path exists from " << start << " to " << end << endl;
       return;
     }
-    for (int v = end; v != -1; v = parent[v]) {
+
+    vector<int> path;
+    for (int v = end; v != -1;
+         v = parent[v]) {  // reconstruct the shortest path by backtracking from
+                           // end to start using the parent array
       path.push_back(v);
     }
     reverse(path.begin(), path.end());
-    cout << "\nShortest path from " << start << " to " << end << " is: ";
-    for (int v : path) {
-      cout << v << "->";
+
+    cout << "\nShortest path from " << start << " to " << end << ": ";
+    for (int node : path) {
+      cout << node << "->";
     }
-    cout << "\nDistance is " << distance[end] << endl;
+    cout << "reached";
+    cout << "\nPath length: " << distance[end] << endl;
   }
 
   void display() {

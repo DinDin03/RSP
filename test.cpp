@@ -4,6 +4,7 @@
 #include <queue>
 #include <random>
 #include <vector>
+#include <chrono>
 using namespace std;
 
 class Graph {
@@ -95,64 +96,34 @@ class Graph {
          << endl;
   }
 
-  void BFS(int start, int end) {
-    vector<bool> visited(
-        vertices,
-        false);  // keeps track of whether certain vertex is visisted or not
-    vector<int> parent(vertices,
-                       -1);  // Records the parent of each vertex in the BFS
-                             // tree. this helps reconstruct the path
-    vector<int> distance(vertices,
-                         INT_MAX);  // Stores the shortest distane from starting
-                                    // vertex to each vertex
-    queue<int> q;  // A queue is used to manages the vertices in the BFS tree
-
-    visited[start] = true;  // Mark the start vertex as visited
-    distance[start] = 0;    // Distance from the starting vertex to itself is 0
-    q.push(start);          // Add the start vertex to the queue
-
-    while (!q.empty()) {  // Iterate until the queue.empty() is false in
-                          // otherwords as long as the queue is not empty
-      int current =
-          q.front();  // set the vertex at the front of the queue to the current
-      q.pop();        // remove it from the queue
-
-      for (int neighbor :
-           adjList[current]) {  // iterates through all the adjacent vertices of
-                                // the current vertex
-        if (!visited[neighbor]) {      // if the neighbour is not visited
-          visited[neighbor] = true;    // Mark it as visited
-          parent[neighbor] = current;  // set the parent of that newly visited
-                                       // vertex to the current vertex
-          distance[neighbor] = distance[current] + 1;  // increment the distance
-          q.push(neighbor);  // add the neighbour to the queue
-
-          if (neighbor == end) {  // if the neighbour is same as the end stop
-            break;
-          }
+  bool DFSHelper(int current, int end, vector<bool> &visited, vector<int> &path, vector<int> &tempPath){
+    visited[current] = true;
+    tempPath.push_back(current);
+    if(current == end){
+      path = tempPath;
+      return true;
+    }
+    for(int neighbor : adjList[current]){
+      if(!visited[neighbor]){
+        if(DFSHelper(neighbor, end, visited, path, tempPath)){
+          return true;
         }
       }
     }
+    tempPath.pop_back();
+    return false;
+  }
 
-    if (!visited[end]) {
-      cout << "\nNo path exists from " << start << " to " << end << endl;
+  void DFS(int start, int end){
+    vector<bool> visited(vertices, false);
+    vector<int> path;
+    vector<int> tempPath;
+
+    if(DFSHelper(start,end,visited,path,tempPath)){
+      //cout << "\nPath from " << start << " to " << end << " is ";
       return;
     }
-
-    vector<int> path;
-    for (int v = end; v != -1;
-         v = parent[v]) {  // reconstruct the shortest path by backtracking from
-                           // end to start using the parent array
-      path.push_back(v);
-    }
-    reverse(path.begin(), path.end());
-
-    cout << "\nShortest path from " << start << " to " << end << ": ";
-    for (int node : path) {
-      cout << node << "->";
-    }
-    cout << "reached";
-    cout << "\nPath length: " << distance[end] << endl;
+    //cout << "\nNo path exists from " << start << " to " << end << endl;;
   }
 
   void display() {
@@ -174,25 +145,29 @@ int main() {
   cout << "Enter the number of verteces you want to add: ";
   cin >> numVerteces;
   uniform_int_distribution<> dist(0, numVerteces - 1);
+  auto sTime = std::chrono::high_resolution_clock::now();
   Graph g(numVerteces);
 
   for (int i = 0; i < numVerteces; i++) {
     g.addVertex(i);
   }
-  for (int i = 0; i < numVerteces * 2; i++) {
+  for (int i = 0; i < numVerteces; i++) {
     int u = dist(gen);
     int v = dist(gen);
     g.addEdge(u, v);
   }
-  g.display();
+  //g.display();
   // g.printVertexWeight();
   for (int i = 0; i < numVerteces; i++) {
     int num = 0;
     for (int j = num; j < numVerteces; j++) {
       if (i != j) {
-        g.BFS(i, j);
+        g.DFS(i, j);
       }
     }
   }
+  auto eTime = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds> (eTime - sTime).count();
+  cout << "Time taken by program is: " << duration << " milliseconds" << endl;
   return 0;
 }

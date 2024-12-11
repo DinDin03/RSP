@@ -95,57 +95,44 @@ class Graph {
          << endl;
   }
 
-  void BFS(int start, int end) {
-    vector<bool> visited(
-        vertices,
-        false);  // keeps track of whether certain vertex is visisted or not
-    vector<int> parent(vertices,
-                       -1);  // Records the parent of each vertex in the BFS
-                             // tree. this helps reconstruct the path
-    vector<int> distance(vertices,
-                         INT_MAX);  // Stores the shortest distane from starting
-                                    // vertex to each vertex
-    queue<int> q;  // A queue is used to manages the vertices in the BFS tree
+  void BFS(int start, int end) { // A function to perfrom breadth-first search on a graph. Takes parameters for start vertex and end vertex
+    vector<bool> visited(vertices, false); // A vector of booleans to track whether a vertex is visited or not. Have 'vertices' number of elements and initialise them to false
+    vector<int> parent(vertices, -1); // A vector of integers to keep track of the parent of each vertex which has vertices number of elememtns and initialised to -1 to indicate no parent
+    vector<int> distance(vertices, INT_MAX); // A vector of integers to keep track of the shortest distance from the start vertex to each vertex which is initialised to infinity
+    queue<int> q; // A queue for traversal which ensures that vertices are explored in the order of their discovery
 
-    visited[start] = true;  // Mark the start vertex as visited
-    distance[start] = 0;    // Distance from the starting vertex to itself is 0
-    q.push(start);          // Add the start vertex to the queue
+    visited[start] = true; // mark the start vertex as visited
+    distance[start] = 0; // Set the distance from itself to iteself to 0
+    q.push(start); // add the start vertex to the queue. 
 
-    while (!q.empty()) {  // Iterate until the queue.empty() is false in
-                          // otherwords as long as the queue is not empty
-      int current =
-          q.front();  // set the vertex at the front of the queue to the current
-      q.pop();        // remove it from the queue
+    while (!q.empty()) { // Iterate through the queue as long as it is not empty
+      int current = q.front(); // an integer called current which will store the value of the first element in the queue
+      q.pop(); // pop the element from the queue as it will be processed
 
-      for (int neighbor :
-           adjList[current]) {  // iterates through all the adjacent vertices of
-                                // the current vertex
-        if (!visited[neighbor]) {      // if the neighbour is not visited
-          visited[neighbor] = true;    // Mark it as visited
-          parent[neighbor] = current;  // set the parent of that newly visited
-                                       // vertex to the current vertex
-          distance[neighbor] = distance[current] + 1;  // increment the distance
-          q.push(neighbor);  // add the neighbour to the queue
+      for (int neighbor : adjList[current]) { // Iterate through all the neighbours of the current vertex
+        if (!visited[neighbor]) { // if the neighbour is not already visited 
+          visited[neighbor] = true; // Mark the neighbour as visited
+          parent[neighbor] = current; // Set the parent of that neighbour to be the current vertex
+          distance[neighbor] = distance[current] + 1; // Update the distance of the neighbout as the distance to the current vertex + 1
+          q.push(neighbor); // Enqueue the neighbour for further exploration 
 
-          if (neighbor == end) {  // if the neighbour is same as the end stop
-            break;
+          if (neighbor == end) { // if the neighbour that is currently being explored is the end vertex
+            break; // exit the loop
           }
         }
       }
     }
 
-    if (!visited[end]) {
+    if (!visited[end]) { // After the BFS, if the end vertex was not reached then there is no path from start to end
       cout << "\nNo path exists from " << start << " to " << end << endl;
       return;
     }
 
-    vector<int> path;
-    for (int v = end; v != -1;
-         v = parent[v]) {  // reconstruct the shortest path by backtracking from
-                           // end to start using the parent array
-      path.push_back(v);
+    vector<int> path; // if a path exists, create a vector of integers which stores the path from start to end
+    for (int v = end; v != -1; v = parent[v]) { // Iterate through the elements of the parent vector from the end to start
+      path.push_back(v); // Add the vertex to the path vector
     }
-    reverse(path.begin(), path.end());
+    reverse(path.begin(), path.end()); // Reverse the path so that it stores from start to end. During BFS, parent vector stores the immediate predessor of each vertex using backward tracing
 
     cout << "\nShortest path from " << start << " to " << end << ": ";
     for (int node : path) {

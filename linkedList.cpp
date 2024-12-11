@@ -59,18 +59,18 @@ class LinkedList { // Class called linkedList
     while (temp->next->next != nullptr) { // iterate trough the list until the node before the last element, so two nodes before the null pointer 
       temp = temp->next; // Increment temp by pointing to the next node
     }
-    temp->next = nullptr;
-    delete temp->next;
+    temp->next = nullptr; // Set the next pointer to null pointer which makes the last node a null pointer
+    delete temp->next; // Delete the next pointer of temp
   }
 
-  void deleteFromPosition(int position) {
-    Node* temp = head;
-    for (int i = 1; i < position - 1; i++) {
-      temp = temp->next;
+  void deleteFromPosition(int position) { // a function to delete from any position which takes a paramter for the poisiton
+    Node* temp = head; // Create a temporary node to point to the head of the list
+    for (int i = 1; i < position - 1; i++) { // Iterate until the temp is pointing to the Node before the desired poisiton
+      temp = temp->next; // Increment temp
     }
-    Node* nodeToDelete = temp->next;
-    temp->next = temp->next->next;
-    delete nodeToDelete;
+    Node* nodeToDelete = temp->next; // create a node called nodeToDelete and make it the next temp node, meaning the desired poisiton
+    temp->next = temp->next->next; // Make the next temp point to the next next temp
+    delete nodeToDelete; // Delete teh nodeToDelete
   }
 
   void display() {

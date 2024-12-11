@@ -1,13 +1,13 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
-  int data;
-  Node* next;
+struct Node { // Create a structure called Node which has 2 member variables data and next
+  int data; // Data stores the actual data representing the node
+  Node* next; // Next is a type of Node which stores the next Node pointed by the current node 
 
-  Node() {
-    data = 0;
-    next = nullptr;
+  Node() { // Default constructor for Node. This will be called when a node is created 
+    data = 0; // Set the value of the node to 0 
+    next = nullptr; // Set the next pointer to null
   }
 };
 

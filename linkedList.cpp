@@ -48,16 +48,16 @@ class LinkedList { // Class called linkedList
     temp->next = newNode; // update the next of the previous position to point to the new Node
   }
 
-  void deleteFromBeginning() {
-    Node* temp = head;
-    head = head->next;
-    delete temp;
+  void deleteFromBeginning() { // Function to delete a node from the beginning of the list
+    Node* temp = head; // Create a temporary node which points to the head of the list
+    head = head->next; // Set the head to point to the next head, meaning set the next node after the head the new head
+    delete temp; // Delete the head by freeing memory
   }
 
-  void deleteFromEnd() {
-    Node* temp = head;
-    while (temp->next->next != nullptr) {
-      temp = temp->next;
+  void deleteFromEnd() { // function to delete a node from the end of a list
+    Node* temp = head; // Create a temporary node which points to the head of the list
+    while (temp->next->next != nullptr) { // iterate trough the list until the node before the last element, so two nodes before the null pointer 
+      temp = temp->next; // Increment temp by pointing to the next node
     }
     temp->next = nullptr;
     delete temp->next;

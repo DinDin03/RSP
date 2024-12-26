@@ -4,16 +4,14 @@
 using namespace std;
 
 bool containsDuplicate(const vector<int>& nums) {
-    unordered_set<int> seen; // Create an unordered set to store seen numbers
-
-    for (int num : nums) { // Iterate through the array
-        if (seen.find(num) != seen.end()) { // Check if num is already in the set
-            return true; // Duplicate found
+    unordered_set<int> seen; 
+    for (int num : nums) {
+        if (seen.find(num) != seen.end()) { 
+            return true; 
         }
-        seen.insert(num); // Add num to the set
+        seen.insert(num); 
     }
-
-    return false; // No duplicates found
+    return false;
 }
 
 int main() {

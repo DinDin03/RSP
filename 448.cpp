@@ -26,7 +26,6 @@ vector<int> findDisappearedNumbers2(vector<int>& nums) {
             nums[index] = -nums[index];
         }
     }
-
     vector<int> result;
     for (int i = 0; i < nums.size(); i++) {
         if (nums[i] > 0) {

@@ -96,9 +96,12 @@ class Graph {
   }
 
   bool DFSHelper(int current, int end, vector<bool> &visited, vector<int> &path,
-                 vector<int> &tempPath) {
-    visited[current] = true;
-    tempPath.push_back(current);
+                 vector<int> &tempPath) { // A helper function for DFS. Current is the current vertex being explored
+                                          // end is the destination vertex. visisted tracks whether a vertex has been already visited or not 
+                                          // path a reference to store the final path from start to end if found 
+                                          // a temporary path to track the current traversal
+    visited[current] = true; // Mark the current vertex being explored as visited
+    tempPath.push_back(current); // push the current vertex into the temporary path
     cout << "pushed " << current << " to the temp path" << endl;
     cout << "Current path is: ";
     for (int temp : tempPath) {
@@ -107,27 +110,26 @@ class Graph {
     cout << endl;
     cout << "Checking path " << current << " to " << end << endl;
 
-    // If end node is reached, store the path
-    if (current == end) {
-      path = tempPath;
+    if (current == end) { // if the end node is reached
+      path = tempPath; // copy the path in the temporary path to the final path 
       cout << "end is reached" << endl;
       return true;  // End found
     }
     cout << "end was not reached. trying again" << endl;
 
-    for (int neighbor : adjList[current]) {
-      if (!visited[neighbor]) {
-        if (DFSHelper(neighbor, end, visited, path, tempPath)) {
-          return true;
+    for (int neighbor : adjList[current]) { // iterate through the neighbours of the current vertex
+      if (!visited[neighbor]) { // if the neighbour is not visited
+        if (DFSHelper(neighbor, end, visited, path, tempPath)) { // recursively call the function for the neighbour so it goes in deep
+          return true; // return true if the helper function returns true, meaning a path is found
         }
       }
     }
 
-    tempPath.pop_back();  // Backtrack
+    tempPath.pop_back(); // if all neighbours of the current vertex have been explored and no path is found, romve the current vertex from the temp path to back track to the previous vertex
     return false;
   }
 
-  void DFS(int start, int end) {
+  void DFS(int start, int end) { // function to call the DFS which takes a start vertex and end vertex
     vector<bool> visited(vertices, false);  // To track visited nodes
     vector<int> path;                       // To store the final path
     vector<int> tempPath;                   // To store the current path

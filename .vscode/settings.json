@@ -7,6 +7,8 @@
         "unordered_set": "cpp",
         "ratio": "cpp",
         "xhash": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "xutility": "cpp",
+        "unordered_map": "cpp"
     }
 }
